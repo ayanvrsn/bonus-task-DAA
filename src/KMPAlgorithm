@@ -1,0 +1,192 @@
+
+public class KMPAlgorithm {
+    
+    /**
+     * Finds all occurrences of a pattern in a given text using KMP algorithm.
+     * 
+     * @param text The text string to search in
+     * @param pattern The pattern string to search for
+     * @return Array of starting indices where pattern is found (empty if not found)
+     */
+    public static int[] search(String text, String pattern) {
+        if (text == null || pattern == null || pattern.length() == 0) {
+            return new int[0];
+        }
+        
+        if (pattern.length() > text.length()) {
+            return new int[0];
+        }
+        
+        int[] lps = computeLPS(pattern);
+        int[] matches = new int[text.length()]; // Maximum possible matches
+        int matchCount = 0;
+        
+        int i = 0; // for text
+        int j = 0; // for pattern
+        
+        while (i < text.length()) {
+            // if characters are match, and move both pointers forward
+            if (j < pattern.length() && text.charAt(i) == pattern.charAt(j)) {
+                i++;
+                j++;
+            } else {
+                // if we are matched the entire pattern 
+                if (j == pattern.length()) {
+                    matches[matchCount++] = i - j; // starting position storage
+                    j = lps[j - 1]; // searching for next occurrence- continue
+                }
+                // handler mismatch
+                else if (i < text.length() && text.charAt(i) != pattern.charAt(j)) {
+                    if (j != 0) {
+                       
+                        j = lps[j - 1];
+                    } else {
+                        i++;
+                    }
+                }
+            }
+        }
+        
+        if (j == pattern.length()) {
+            matches[matchCount++] = i - j;
+        }
+        
+        // only return the actual matches found
+        int[] result = new int[matchCount];
+        System.arraycopy(matches, 0, result, 0, matchCount);
+        return result;
+    }
+    
+    /**
+     * Computes the Longest Proper Prefix which is also Suffix (LPS) array.
+     * 
+     * The LPS array stores the length of the longest proper prefix that is also
+     * a suffix for each position in the pattern. This allows us to skip characters
+     * that we know will match when a mismatch occurs.
+     * 
+     * Example: For pattern "ABABCABAB"
+     * Position: 0 1 2 3 4 5 6 7 8
+     * Pattern:  A B A B C A B A B
+     * LPS:      0 0 1 2 0 1 2 3 4
+     * 
+     * @param pattern The pattern string
+     * @return LPS array where lps[i] is the length of longest proper prefix
+     *         that is also a suffix for pattern[0..i]
+     */
+    private static int[] computeLPS(String pattern) {
+        int m = pattern.length();
+        int[] lps = new int[m];
+        int len = 0; // Length of the previous LPS
+        int i = 1;
+        
+        lps[0] = 0; 
+        
+        // building the LPS array
+        while (i < m) {
+            if (pattern.charAt(i) == pattern.charAt(len)) {
+                // characters match, increment length and storing
+                len++;
+                lps[i] = len;
+                i++;
+            } else {
+                if (len != 0) {
+                    // try again a shorter prefix
+                    len = lps[len - 1];
+                } else {
+                    // no any matching prefix found
+                    lps[i] = 0;
+                    i++;
+                }
+            }
+        }
+        
+        return lps;
+    }
+    
+    /**
+     * Prints the search results in a formatted way.
+     * 
+     * @param text The text that was searched
+     * @param pattern The pattern that was searched for
+     * @param matches Array of starting indices where pattern was found
+     */
+    public static void printResults(String text, String pattern, int[] matches) {
+        System.out.println("Text: " + text);
+        System.out.println("Pattern: " + pattern);
+        System.out.println("Text length: " + text.length());
+        System.out.println("Pattern length: " + pattern.length());
+        
+        if (matches.length == 0) {
+            System.out.println("No matches found.");
+        } else {
+            System.out.println("Found " + matches.length + " occurrence(s) at position(s):");
+            for (int pos : matches) {
+                System.out.println("  - Position " + pos);
+            }
+        }
+        System.out.println();
+    }
+    
+
+    public static void main(String[] args) {
+        System.out.println("=== Knuth-Morris-Pratt (KMP) String Matching Algorithm ===\n");
+        
+        System.out.println("--- Test Case 1: Short String ---");
+        String text1 = "ABABDABACDABABCABCABAB";
+        String pattern1 = "ABAB";
+        int[] matches1 = search(text1, pattern1);
+        printResults(text1, pattern1, matches1);
+        
+        System.out.println("--- Test Case 2: Medium-Length String ---");
+        String text2 = "The quick brown fox jumps over the lazy dog. " +
+                       "The dog was lazy and the fox was quick. " +
+                       "Quick brown foxes are known to jump over lazy dogs.";
+        String pattern2 = "quick";
+        int[] matches2 = search(text2, pattern2);
+        printResults(text2, pattern2, matches2);
+        
+        StringBuilder longText = new StringBuilder();
+        for (int i = 0; i < 100; i++) {
+            longText.append("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        }
+        longText.append("PATTERN");
+        for (int i = 0; i < 50; i++) {
+            longText.append("1234567890");
+        }
+        longText.append("PATTERN");
+        for (int i = 0; i < 50; i++) {
+            longText.append("abcdefghijklmnopqrstuvwxyz");
+        }
+        
+        String text3 = longText.toString();
+        String pattern3 = "PATTERN";
+        int[] matches3 = search(text3, pattern3);
+        System.out.println("--- Test Case 3: Longer String ---");
+        System.out.println("Text: " + text3.substring(0, Math.min(100, text3.length())) + "...");
+        System.out.println("Pattern: " + pattern3);
+        System.out.println("Text length: " + text3.length());
+        System.out.println("Pattern length: " + pattern3.length());
+        if (matches3.length == 0) {
+            System.out.println("No matches found.");
+        } else {
+            System.out.println("Found " + matches3.length + " occurrence(s) at position(s):");
+            for (int pos : matches3) {
+                System.out.println("  - Position " + pos);
+            }
+        }
+        System.out.println();
+        
+        System.out.println("--- Test Case 4: Pattern Not Found ---");
+        String text4 = "This is a test string";
+        String pattern4 = "xyz";
+        int[] matches4 = search(text4, pattern4);
+        printResults(text4, pattern4, matches4);
+        
+        System.out.println("--- Test Case 5: Pattern at Beginning ---");
+        String text5 = "HELLO world, HELLO universe";
+        String pattern5 = "HELLO";
+        int[] matches5 = search(text5, pattern5);
+        printResults(text5, pattern5, matches5);
+    }
+}
+
