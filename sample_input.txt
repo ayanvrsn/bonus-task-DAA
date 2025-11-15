@@ -1,0 +1,28 @@
+Sample Input Strings for KMP Algorithm Testing
+================================================
+
+Short String Test:
+Text: ABABDABACDABABCABCABAB
+Pattern: ABAB
+
+Medium-Length String Test:
+Text: The quick brown fox jumps over the lazy dog. The dog was lazy and the fox was quick. Quick brown foxes are known to jump over lazy dogs.
+Pattern: quick
+
+Long String Test:
+Text: [Generated programmatically - 2600+ characters with repeated patterns]
+Pattern: PATTERN
+
+Edge Cases:
+1. Pattern not found:
+   Text: This is a test string
+   Pattern: xyz
+
+2. Pattern at beginning:
+   Text: HELLO world, HELLO universe
+   Pattern: HELLO
+
+3. Multiple overlapping matches:
+   Text: AAAAA
+   Pattern: AAA
+

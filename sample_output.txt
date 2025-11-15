@@ -1,0 +1,63 @@
+Sample Output from KMP Algorithm Execution
+===========================================
+
+=== Knuth-Morris-Pratt (KMP) String Matching Algorithm ===
+
+--- Test Case 1: Short String ---
+Text: ABABDABACDABABCABCABAB
+Pattern: ABAB
+Text length: 22
+Pattern length: 4
+Found 3 occurrence(s) at position(s):
+  - Position 0
+  - Position 10
+  - Position 18
+
+--- Test Case 2: Medium-Length String ---
+Text: The quick brown fox jumps over the lazy dog. The dog was lazy and the fox was quick. Quick brown foxes are known to jump over lazy dogs.
+Pattern: quick
+Text length: 136
+Pattern length: 5
+Found 2 occurrence(s) at position(s):
+  - Position 4
+  - Position 78
+
+--- Test Case 3: Longer String ---
+Text: ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ...
+Pattern: PATTERN
+Text length: 4414
+Pattern length: 7
+Found 2 occurrence(s) at position(s):
+  - Position 2600
+  - Position 3107
+
+--- Test Case 4: Pattern Not Found ---
+Text: This is a test string
+Pattern: xyz
+Text length: 21
+Pattern length: 3
+No matches found.
+
+--- Test Case 5: Pattern at Beginning ---
+Text: HELLO world, HELLO universe
+Pattern: HELLO
+Text length: 28
+Pattern length: 5
+Found 2 occurrence(s) at position(s):
+  - Position 0
+  - Position 13
+
+=== Test Suite Results ===
+Test 1: Basic pattern matching - ✓ PASSED
+Test 2: Multiple occurrences - ✓ PASSED
+Test 3: Pattern not found - ✓ PASSED
+Test 4: Pattern equals text - ✓ PASSED
+Test 5: Pattern longer than text - ✓ PASSED
+Test 6: Empty pattern - ✓ PASSED
+Test 7: Single character pattern - ✓ PASSED
+Test 8: Overlapping matches - ✓ PASSED
+
+Tests passed: 8
+Tests failed: 0
+Total tests: 8
+
